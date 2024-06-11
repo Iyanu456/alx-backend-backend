@@ -1,31 +1,36 @@
 #!/usr/bin/env python3
-'''Task 0: Basic Flask app
-'''
+"""
+    Contains a basic flask app displaying 'Welcome to Holberton' on
+    a single route '/'
+"""
 
-from flask import Flask, render_template
+
+from flask import Flask, render_template, request
 from flask_babel import Babel
+from os import getenv
 
 
-class Config:
-    '''Config class'''
-
-    LANGUAGES = ["en", "fr"]
-    BABEL_DEFAULT_LOCALE = "en"
-    BABEL_DEFAULT_TIMEZONE = "UTC"
-
-
-app = Flask(__name__)
-app.config.from_object(Config)
-app.url_map.strict_slashes = False
-
+app = Flask(__name__, static_url_path='')
 babel = Babel(app)
 
 
-@app.route('/')
-def index():
-    '''default route'''
-    return render_template("1-index.html",)
+class Config(object):
+    """configuration for babel"""
+    LANGUAGES = ['en', 'fr']
+    BABEL_DEFAULT_LOCALE = 'en'
+    BABEL_DEFAULT_TIMEZONE = 'UTC'
+
+
+app.config.from_object('1-app.Config')
+
+
+@app.route('/', strict_slashes=False)
+def index() -> str:
+    """this route renders 0-index.html template"""
+    return render_template('1-index.html')
 
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    host = getenv("API_HOST", "0.0.0.0")
+    port = getenv("API_PORT", "5000")
+    app.run(host=host, port=port)

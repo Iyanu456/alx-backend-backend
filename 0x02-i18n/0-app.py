@@ -1,17 +1,24 @@
 #!/usr/bin/env python3
-'''Task 0: Basic Flask app
-'''
-
-from flask import Flask, render_template
-
-app = Flask(__name__)
+"""
+    Contains a basic flask app rendering index.html
+    on a single route '/'
+"""
 
 
-@app.route('/')
-def index():
-    '''default route'''
-    return render_template("0-index.html",)
+from flask import Flask, render_template, request
+from os import getenv
+
+
+app = Flask(__name__, static_url_path='')
+
+
+@app.route('/', strict_slashes=False)
+def index() -> str:
+    """this route renders 0-index.html template"""
+    return render_template('0-index.html')
 
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    host = getenv("API_HOST", "0.0.0.0")
+    port = getenv("API_PORT", "5000")
+    app.run(host=host, port=port)
